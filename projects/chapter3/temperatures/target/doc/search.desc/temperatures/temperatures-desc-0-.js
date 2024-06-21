@@ -1,0 +1,1 @@
+searchState.loadedDescShard("temperatures", 0, "")
