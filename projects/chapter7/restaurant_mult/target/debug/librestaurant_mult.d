@@ -1,0 +1,1 @@
+C:\Users\TGang\rust\projects\chapter7\restaurant_mult\target\debug\librestaurant_mult.rlib: C:\Users\TGang\rust\projects\chapter7\restaurant_mult\src\front_of_house\hosting.rs C:\Users\TGang\rust\projects\chapter7\restaurant_mult\src\front_of_house.rs C:\Users\TGang\rust\projects\chapter7\restaurant_mult\src\lib.rs
