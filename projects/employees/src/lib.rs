@@ -16,13 +16,11 @@ pub fn input() -> (String, bool) {
             return (input, false)
         }
     }
-
     return (input, true)
 }
 
 pub fn employees() {
     // let's users select to add a new employee to a department, view existing employees in the company or by department, or quit the program.
-
     let mut map: HashMap<String, String> = HashMap::new();
     
     'employees: loop {
@@ -42,7 +40,6 @@ pub fn employees() {
             _ => continue,
         }
     }
-    
 }
 
 pub fn add_employee(map: &mut HashMap<String, String>) {
@@ -95,7 +92,6 @@ pub fn view_employees(map: &HashMap<String, String>) {
     'view: loop {
     
         println!("\nWould you like to view employees in the 'Company' or in a specific 'Department'? You can also go 'Back' or 'Quit' the program.");
-
         let (input, b) = input();
 
         // if input was empty or contained non-alphabeticals
@@ -133,7 +129,6 @@ pub fn view_company(map: &HashMap<String, String>) {
 pub fn view_department(map: &HashMap<String, String>) {
     // adds all employees from that department from the hashmap to a vector, sorts it, and prints the names
     'view: loop {
-    
         println!("\nFor which department would you like to see the employees? You can also go 'Back' or 'Quit'?");
         let (input, b) = input();
 
