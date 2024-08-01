@@ -7,15 +7,15 @@ pub fn employees() {
     
     'employees: loop {
         println!("\nWould you like to 'Add' an employee, 'View' the company's employees, or 'Quit'?");
-        let (input, b) = input();
+        let input = input();
 
         // if input was empty or contained non-alphabeticals
-        if b == false {
+        if input.valid == false {
             continue 'employees
         }
 
         // matches the user's input and calls the corresponding function
-        match input.as_str() {
+        match input.text.as_str() {
             "Add" => add_employee(&mut map),
             "View" => view_employees(&map),
             "Quit" => process::exit(0),
@@ -24,66 +24,73 @@ pub fn employees() {
     }
 }
 
-fn input() -> (String, bool) {
+struct Input {
+    text: String,
+    valid: bool,
+}
+
+fn input() -> Input {
     let mut input = String::new();
     io::stdin().read_line(&mut input).expect("Unable to read input.");
     input = input.trim().to_string();
 
     // don't accept empty inputs
     if input.is_empty() {
-        return (input, false)
+        return Input { text: input, valid: false }
     }
 
     // only accept alphabetical inputs
     for letter in input.chars() {
         if !letter.is_alphabetic() {
-            return (input, false)
+            return Input { text: input, valid: false }
         }
     }
-    return (input, true)
+    Input { text: input, valid: true }
 }
 
 fn add_employee(map: &mut HashMap<String, String>) {
     // gets the name of the new employee
     let name = 'name: loop {
         println!("\nPlease enter the name of the new employee, go 'Back', or 'Quit'.");
-        let (name, b) = input();
+        let name = input();
 
         // if input was empty or contained non-alphabeticals
-        if b == false {
+        if name.valid == false {
             continue 'name
         }
 
-        match name.as_str() {
+        match name.text.as_str() {
             "Back" => return,
             "Quit" => process::exit(0),
             _ => (),
         }
 
-        break name;
+        break name.text;
     };
 
     // gets the department of the new employee
     let department = 'department: loop {
         
         println!("\nPlease enter the department of the new employee, go 'Back', or 'Quit'.");
-        let (department, b) = input();
+        let department = input();
 
         // if input was empty or contained non-alphabeticals
-        if b == false {
+        if department.valid == false {
             continue 'department
         }
 
-        match department.as_str() {
+        match department.text.as_str() {
             "Back" => return,
             "Quit" => process::exit(0),
             _ => (),
         }
 
-        break department;
+        break department.text;
     };
 
     // adds employee to the hashmap if they don't exist yet, or updates the employee's department
+    // doesn't use name.text and department.text because those structs don't exist outside of their loops,
+    // the values are returned
     map.insert(name, department);
 }
 
@@ -93,14 +100,14 @@ fn view_employees(map: &HashMap<String, String>) {
     'view: loop {
     
         println!("\nWould you like to view employees in the 'Company' or in a specific 'Department'? You can also go 'Back' or 'Quit' the program.");
-        let (input, b) = input();
+        let input = input();
 
         // if input was empty or contained non-alphabeticals
-        if b == false {
+        if input.valid == false {
             continue 'view
         }
             
-        match input.as_str() {
+        match input.text.as_str() {
             "Company" => view_company(map),
             "Department" => view_department(map),
             "Back" => return,
@@ -131,14 +138,14 @@ fn view_department(map: &HashMap<String, String>) {
     // adds all employees from that department from the hashmap to a vector, sorts it, and prints the names
     'view: loop {
         println!("\nFor which department would you like to see the employees? You can also go 'Back' or 'Quit'?");
-        let (input, b) = input();
+        let input = input();
 
         // if input was empty or contained non-alphabeticals
-        if b == false {
+        if input.valid == false {
             continue 'view
         }
 
-        match input.as_str() {
+        match input.text.as_str() {
             "Back" => return,
             "Quit" => process::exit(0),
             _ => (),
@@ -148,13 +155,13 @@ fn view_department(map: &HashMap<String, String>) {
         let mut names: Vec<String> = vec![];
 
         for (name, department) in map.iter() {
-            if *department == input {
+            if *department == input.text {
                 names.push(name.to_string());
             }
         }
         names.sort();
 
-        print!("\n{} employees: {}", input, &names[0]);
+        print!("\n{} employees: {}", input.text, &names[0]);
         for name in &names[1..] {
             print!(", {}", name);
         }
