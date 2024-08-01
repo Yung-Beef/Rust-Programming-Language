@@ -1,24 +1,6 @@
 use std::{process, io};
 use std::collections::HashMap;
 
-pub fn input() -> (String, bool) {
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("Unable to read input.");
-    input = input.trim().to_string();
-
-    if input.is_empty() {
-        return (input, false)
-    }
-
-    // only accept alphabetical inputs
-    for letter in input.chars() {
-        if !letter.is_alphabetic() {
-            return (input, false)
-        }
-    }
-    return (input, true)
-}
-
 pub fn employees() {
     // let's users select to add a new employee to a department, view existing employees in the company or by department, or quit the program.
     let mut map: HashMap<String, String> = HashMap::new();
@@ -42,7 +24,26 @@ pub fn employees() {
     }
 }
 
-pub fn add_employee(map: &mut HashMap<String, String>) {
+fn input() -> (String, bool) {
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Unable to read input.");
+    input = input.trim().to_string();
+
+    // don't accept empty inputs
+    if input.is_empty() {
+        return (input, false)
+    }
+
+    // only accept alphabetical inputs
+    for letter in input.chars() {
+        if !letter.is_alphabetic() {
+            return (input, false)
+        }
+    }
+    return (input, true)
+}
+
+fn add_employee(map: &mut HashMap<String, String>) {
     // gets the name of the new employee
     let name = 'name: loop {
         println!("\nPlease enter the name of the new employee, go 'Back', or 'Quit'.");
@@ -87,7 +88,7 @@ pub fn add_employee(map: &mut HashMap<String, String>) {
 }
 
 
-pub fn view_employees(map: &HashMap<String, String>) {
+fn view_employees(map: &HashMap<String, String>) {
     // in company or specific department? get input
     'view: loop {
     
@@ -109,7 +110,7 @@ pub fn view_employees(map: &HashMap<String, String>) {
     };
 }
 
-pub fn view_company(map: &HashMap<String, String>) {
+fn view_company(map: &HashMap<String, String>) {
     // sorts the employee name vector to print the names in alphabetical order
     let mut names: Vec<String> = vec![];
 
@@ -126,7 +127,7 @@ pub fn view_company(map: &HashMap<String, String>) {
 }
 
 
-pub fn view_department(map: &HashMap<String, String>) {
+fn view_department(map: &HashMap<String, String>) {
     // adds all employees from that department from the hashmap to a vector, sorts it, and prints the names
     'view: loop {
         println!("\nFor which department would you like to see the employees? You can also go 'Back' or 'Quit'?");
