@@ -1,17 +1,19 @@
-use std::{process, io};
 use std::collections::HashMap;
+use std::{io, process};
 
 pub fn employees() {
     // let's users select to add a new employee to a department, view existing employees in the company or by department, or quit the program.
     let mut map: HashMap<String, String> = HashMap::new();
-    
+
     'employees: loop {
-        println!("\nWould you like to 'Add' an employee, 'View' the company's employees, or 'Quit'?");
+        println!(
+            "\nWould you like to 'Add' an employee, 'View' the company's employees, or 'Quit'?"
+        );
         let input = input();
 
         // if input was empty or contained non-alphabeticals
-        if input.valid == false {
-            continue 'employees
+        if !input.valid {
+            continue 'employees;
         }
 
         // matches the user's input and calls the corresponding function
@@ -31,21 +33,32 @@ struct Input {
 
 fn input() -> Input {
     let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("Unable to read input.");
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Unable to read input.");
     input = input.trim().to_string();
 
     // don't accept empty inputs
     if input.is_empty() {
-        return Input { text: input, valid: false }
+        return Input {
+            text: input,
+            valid: false,
+        };
     }
 
     // only accept alphabetical inputs
     for letter in input.chars() {
         if !letter.is_alphabetic() {
-            return Input { text: input, valid: false }
+            return Input {
+                text: input,
+                valid: false,
+            };
         }
     }
-    Input { text: input, valid: true }
+    Input {
+        text: input,
+        valid: true,
+    }
 }
 
 fn add_employee(map: &mut HashMap<String, String>) {
@@ -55,8 +68,8 @@ fn add_employee(map: &mut HashMap<String, String>) {
         let name = input();
 
         // if input was empty or contained non-alphabeticals
-        if name.valid == false {
-            continue 'name
+        if !name.valid {
+            continue 'name;
         }
 
         match name.text.as_str() {
@@ -70,13 +83,12 @@ fn add_employee(map: &mut HashMap<String, String>) {
 
     // gets the department of the new employee
     let department = 'department: loop {
-        
         println!("\nPlease enter the department of the new employee, go 'Back', or 'Quit'.");
         let department = input();
 
         // if input was empty or contained non-alphabeticals
-        if department.valid == false {
-            continue 'department
+        if !department.valid {
+            continue 'department;
         }
 
         match department.text.as_str() {
@@ -94,19 +106,17 @@ fn add_employee(map: &mut HashMap<String, String>) {
     map.insert(name, department);
 }
 
-
 fn view_employees(map: &HashMap<String, String>) {
     // in company or specific department? get input
     'view: loop {
-    
         println!("\nWould you like to view employees in the 'Company' or in a specific 'Department'? You can also go 'Back' or 'Quit' the program.");
         let input = input();
 
         // if input was empty or contained non-alphabeticals
-        if input.valid == false {
-            continue 'view
+        if !input.valid {
+            continue 'view;
         }
-            
+
         match input.text.as_str() {
             "Company" => view_company(map),
             "Department" => view_department(map),
@@ -114,7 +124,7 @@ fn view_employees(map: &HashMap<String, String>) {
             "Quit" => process::exit(0),
             _ => continue,
         }
-    };
+    }
 }
 
 fn view_company(map: &HashMap<String, String>) {
@@ -126,13 +136,20 @@ fn view_company(map: &HashMap<String, String>) {
     }
 
     names.sort();
-    print!("\nCompany employees: {} from {}", &names[0], map.get(&names[0]).unwrap_or(&"NO DEPARTMENT".to_string()));
+    print!(
+        "\nCompany employees: {} from {}",
+        &names[0],
+        map.get(&names[0]).unwrap_or(&"NO DEPARTMENT".to_string())
+    );
     for name in &names[1..] {
-        print!(", {} from {}", name, map.get(name).unwrap_or(&"NO DEPARTMENT".to_string()));
+        print!(
+            ", {} from {}",
+            name,
+            map.get(name).unwrap_or(&"NO DEPARTMENT".to_string())
+        );
     }
-    print!("\n");
+    println!();
 }
-
 
 fn view_department(map: &HashMap<String, String>) {
     // adds all employees from that department from the hashmap to a vector, sorts it, and prints the names
@@ -141,8 +158,8 @@ fn view_department(map: &HashMap<String, String>) {
         let input = input();
 
         // if input was empty or contained non-alphabeticals
-        if input.valid == false {
-            continue 'view
+        if !input.valid {
+            continue 'view;
         }
 
         match input.text.as_str() {
@@ -165,7 +182,7 @@ fn view_department(map: &HashMap<String, String>) {
         for name in &names[1..] {
             print!(", {}", name);
         }
-        print!("\n");
-        return
+        println!();
+        return;
     }
 }
